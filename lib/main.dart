@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_navigation/product.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+
+import 'product.dart';
+import 'repository.dart';
 
 void main() {
-  runApp(const MyApp ());  //ProductSummaryPage
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ProductRepository(),
+      child: const MyApp(),
+    ),
+  );
 }
 
-class myApp extends StatelessWidget{
-  const myApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  @override 
-  Widget build(BuildContext context){
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Product Registration',
       routerConfig: _router,
     );
-
-  
-  
-  
   }
-
-
-
-
+}
 
 final GoRouter _router = GoRouter(
+  initialLocation: '/product-form',
   routes: [
     GoRoute(
       path: '/product-form',
       builder: (context, state) => const ProductFormPage(),
-      ),
-      GoRoute(
-        path: 'product-summary',
-        builder: (context, state){
-          final product = state.extra as Product?;
-          return ProductSummaryPage(product: product)
-        },
-      ),
+    ),
+    GoRoute(
+      path: '/product-summary',
+      builder: (context, state) {
+        return const ProductSummaryPage();
+      },
+    ),
   ],
-  initialLocation: '/product-form',
 );
